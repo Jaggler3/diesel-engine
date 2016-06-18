@@ -121,7 +121,9 @@ function Render()
                 context.font = uiObject.font;
                 context.fillStyle = uiObject.style;
                 context.textAlign = uiObject.centered ? "center" : "left";
+				context.globalAlpha = uiObject.opacity;
                 context.fillText(uiObject.text, uiObject.position.x, uiObject.position.y);
+				context.globalAlpha = 1;
             } else if(Button.prototype.isPrototypeOf(uiObject))
             {
                 //draw button image
@@ -372,6 +374,7 @@ function Text(position, text)
     this.centered = true;
     this.font = "22px Arial";
     this.style = "black";
+	this.opacity = 1;
 }
 
 function Button(rect, text)
