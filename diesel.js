@@ -65,6 +65,8 @@ function Init()
     
     window.addEventListener('keydown', function(evt) { PROCESS_KEY_INPUT_DOWN(evt.keyCode); }, false);
     window.addEventListener('keyup', function(evt) { PROCESS_KEY_INPUT_UP(evt.keyCode); }, false);
+	
+	window.addEventListener('contextmenu', function(ev) { ev.preventDefault(); return false; }, false);	
     
     lastFrame = new Date().getTime();
 }
