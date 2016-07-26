@@ -379,6 +379,16 @@ function Text(position, text)
     this.style = "black";
 	this.opacity = 1;
 	this.baseline = "middle";
+	this.setFont(font)
+	{
+	    this.font = font;
+	    return this;
+	};
+	this.setStyle(style)
+	{
+	    this.style = style;
+	    return this;
+	};
 }
 
 function Button(rect, text)
