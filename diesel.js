@@ -379,12 +379,12 @@ function Text(position, text)
     this.style = "black";
 	this.opacity = 1;
 	this.baseline = "middle";
-	this.setFont(f)
+	this.setFont = function(font)
 	{
-	    this.font = f;
+	    this.font = font;
 	    return this;
 	};
-	this.setStyle(style)
+	this.setStyle = function(style)
 	{
 	    this.style = style;
 	    return this;
