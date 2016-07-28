@@ -330,6 +330,7 @@ Sprite.prototype.setImage = function(path)
 {
 	this.imagePath = path;
 	this.size = new Vec2(document.getElementById(path).naturalWidth, document.getElementById(path).naturalHeight);
+	return this;
 }
 
 function Transform()
@@ -367,6 +368,17 @@ function Rect(x, y, width, height)
     this.y = y;
     this.width = width;
     this.height = height;
+    this.setPosition = function(x, y)
+    {
+        this.x = x;
+        this.y = y;
+        return this;
+    };
+    this.setSize = function(width, height)
+    {
+        this.width = width;
+        this.height = height;
+    };
 }
 
 function Text(position, text)
