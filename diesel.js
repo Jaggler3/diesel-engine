@@ -197,19 +197,22 @@ function RENDER_SPRITE(spr)
     
     if(spr.imageSrcMode == ImageSourceMode.SPECIFIED)
     {
-        var ci = document.createElement("canvas");
-        var cic = ci.getContext('2d');
-        ci.width = spr.imageSrcRect.width;
-        ci.height = spr.imageSrcRect.height;
-        cic.drawImage(img, 
-            spr.imageSrcRect.x,
-            spr.imageSrcRect.y,
-            spr.imageSrcRect.width,
-            spr.imageSrcRect.height,
-            0, 0,
-            spr.imageSrcRect.width,
-            spr.imageSrcRect.height);
-        img = ci;
+        if(spr._lastSrcRect != spr.imageSrcRect)
+        {
+            var ci = document.createElement("canvas");
+            var cic = ci.getContext('2d');
+            ci.width = spr.imageSrcRect.width;
+            ci.height = spr.imageSrcRect.height;
+            cic.drawImage(img, 
+                spr.imageSrcRect.x,
+                spr.imageSrcRect.y,
+                spr.imageSrcRect.width,
+                spr.imageSrcRect.height,
+                0, 0,
+                spr.imageSrcRect.width,
+                spr.imageSrcRect.height);
+            img = spr._clipCache = ci;
+        }
     }
     
     var oc = document.createElement('canvas'),
@@ -334,6 +337,8 @@ function Sprite()
     this.step = 1;
     this.imageSrcMode = ImageSourceMode.AUTO;
     this.imageSrcRect = new Rect(0, 0, 0, 0);
+    this._lastSrcRect = this.imageSrcRect;
+    this._clipCache = new Image();
 }
 
 var ImageSourceMode = {
