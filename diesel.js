@@ -424,6 +424,15 @@ function Rect(x, y, width, height)
     };
 }
 
+Rect.prototype.mul = function(scl)
+{
+    this.x *= scl;
+    this.y *= scl;
+    this.width *= scl;
+    this.height *= scl;
+    return this;
+};
+
 function Text(position, text)
 {
     this.visible = true;
