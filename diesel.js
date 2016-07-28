@@ -197,8 +197,9 @@ function RENDER_SPRITE(spr)
     
     if(spr.imageSrcMode == ImageSourceMode.SPECIFIED)
     {
-        if(spr._lastSrcRect != spr.imageSrcRect)
+        if(spr._lastSrcRect.equals(spr.imageSrcRect))
         {
+            spr._lastSrcRect = spr.imageSrcRect;
             var ci = document.createElement("canvas");
             var cic = ci.getContext('2d');
             ci.width = spr.imageSrcRect.width;
@@ -436,6 +437,11 @@ Rect.prototype.mul = function(scl)
     this.width *= scl;
     this.height *= scl;
     return this;
+};
+
+Rect.prototype.equals = function(rect)
+{
+    return this.x == rect.x && this.y == rect.y && this.width == rect.width && this.height == rect.height;
 };
 
 function Text(position, text)
