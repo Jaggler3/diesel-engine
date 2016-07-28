@@ -368,6 +368,14 @@ Sprite.prototype.setSourceRect = function(rect)
 	return this;
 };
 
+Sprite.prototype.setSourceRectAndSize = function(rect)
+{
+	this.imageSrcRect = rect;
+	this.imageSrcMode = ImageSourceMode.SPECIFIED;
+	this.size = new Vec2(rect.width, rect.height);
+	return this;
+};
+
 function Transform()
 {
 	this.position = new Vec2(0, 0);
