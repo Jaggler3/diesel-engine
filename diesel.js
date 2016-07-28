@@ -195,6 +195,23 @@ function RENDER_SPRITE(spr)
     var img = new Image();
     img.src = spr.imagePath;
     
+    if(spr.imageSrcMode == ImageSourceMode.SPECIFIED)
+    {
+        var ci = document.createElement("canvas");
+        var cic = ci.getContext('2d');
+        ci.width = spr.imageSrcRect.width;
+        ci.height = spr.imageSrcRect.height;
+        cic.drawImage(img, 
+            spr.imageSrcRect.x,
+            spr.imageSrcRect.y,
+            spr.imageSrcRect.width,
+            spr.imageSrcRect.height,
+            0, 0,
+            spr.imageSrcRect.width,
+            spr.imageSrcRect.height);
+        img = ci;
+    }
+    
     var oc = document.createElement('canvas'),
         octx = oc.getContext('2d');
     oc.width = img.width * spr.step;
@@ -315,7 +332,16 @@ function Sprite()
     this.children = [];
     this.enabled = true;
     this.step = 1;
+    this.imageSrcMode = ImageSourceMode.AUTO;
+    this.imageSrcRect = new Rect(0, 0, 0, 0);
 }
+
+var ImageSourceMode = {
+    //automatic source rect, equalling the size of the sprites image
+    AUTO: 0,
+    //using the specified source rect, does not change when the sprite image is updated
+    SPECIFIED: 1,
+};
 
 var ExpandType = {
     //stretch to fill size
@@ -324,14 +350,23 @@ var ExpandType = {
     TILE: 1,
     //stretch but keep original dimensions
     PRESERVE: 2,
-}
+};
 
 Sprite.prototype.setImage = function(path)
 {
 	this.imagePath = path;
-	this.size = new Vec2(document.getElementById(path).naturalWidth, document.getElementById(path).naturalHeight);
+	var img = new Image();
+	img.src = path;
+	this.size = new Vec2(img.naturalWidth, img.naturalHeight);
 	return this;
-}
+};
+
+Sprite.prototype.setSourceRect = function(rect)
+{
+	this.imageSrcRect = rect;
+	this.imageSrcMode = ImageSourceMode.SPECIFIED;
+	return this;
+};
 
 function Transform()
 {
