@@ -64,11 +64,13 @@ function Init() {
 	mainCanvas.addEventListener('mousedown', function(evt) {
 		FIRST_MOUSE_DOWN = !MOUSE_DOWN;
 		MOUSE_DOWN = true;
+		MOUSE_POS = new Vec2(evt.clientX - mainCanvas.getBoundingClientRect().left - WIDTH / 2, evt.clientY - mainCanvas.getBoundingClientRect().top - HEIGHT / 2);
 	}, false);
 	
 	mainCanvas.addEventListener('touchstart', function(evt){
 		FIRST_MOUSE_DOWN = !MOUSE_DOWN;
 		MOUSE_DOWN = true;
+		MOUSE_POS = new Vec2(evt.clientX - mainCanvas.getBoundingClientRect().left - WIDTH / 2, evt.clientY - mainCanvas.getBoundingClientRect().top - HEIGHT / 2);
 	}, false);
 	
 	window.addEventListener('touchmove', function(evt) {
