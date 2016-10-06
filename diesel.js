@@ -58,14 +58,26 @@ function Init() {
 	Resize_Canvas();
 
 	mainCanvas.addEventListener('mousemove', function(evt) {
-		MOUSE_POS = new Vec2(evt.clientX - mainCanvas.getBoundingClientRect().left, evt.clientY - mainCanvas.getBoundingClientRect().top);
-		MOUSE_POS.x -= WIDTH / 2;
-		MOUSE_POS.y -= HEIGHT / 2;
+		MOUSE_POS = new Vec2(evt.clientX - mainCanvas.getBoundingClientRect().left - WIDTH / 2, evt.clientY - mainCanvas.getBoundingClientRect().top - HEIGHT / 2);
 	}, false);
 
 	mainCanvas.addEventListener('mousedown', function(evt) {
 		FIRST_MOUSE_DOWN = !MOUSE_DOWN;
 		MOUSE_DOWN = true;
+	}, false);
+	
+	mainCanvas.addEventListener('touchstart', function(evt){
+		FIRST_MOUSE_DOWN = !MOUSE_DOWN;
+		MOUSE_DOWN = true;
+	}, false);
+	
+	window.addEventListener('touchmove', function(evt) {
+		MOUSE_POS = new Vec2(evt.changedTouches[0].pageX - mainCanvas.getBoundingClientRect().left - WIDTH / 2, evt.changedTouches[0].pageY - mainCanvas.getBoundingClientRect().top - HEIGHT / 2);
+	}, false);
+	
+	window.addEventListener('touchend', function(evt) {
+		MOUSE_DOWN = false;
+		FIRST_MOUSE_DOWN = false;
 	}, false);
 
 	mainCanvas.addEventListener('mouseup', function(evt) {
