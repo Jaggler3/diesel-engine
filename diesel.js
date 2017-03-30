@@ -391,6 +391,11 @@ Sprite.prototype.setImage = function(path) {
 	return this;
 };
 
+Sprite.prototype.setSize = function(size) {
+	this.size = size;
+	return this;
+};
+
 Sprite.prototype.setSourceRect = function(rect) {
 	this.imageSrcRect = rect;
 	this.imageSrcMode = ImageSourceMode.SPECIFIED;
