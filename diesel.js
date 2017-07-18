@@ -13,16 +13,22 @@ var HEIGHT;
 var GAME_UPDATE_EXT_FUNC = function() {};
 var MOUSE_UPDATE_EXT_FUNC = function() {};
 
+//the default image paths for button states
 var BUTTON_NORMAL = "res/button/normal.png";
 var BUTTON_HOVER = "res/button/hover.png";
 var BUTTON_CLICKED = "res/button/click.png";
 var BUTTON_DISABLED = "res/button/disabled.png";
 
+//the mouse position (should not be set)
 var MOUSE_POS = new Vec2(0, 0);
 
+//whether the user is pressing on the mouse
 var MOUSE_DOWN = false;
+
+//true when the mouse has just been clicked instead of being held
 var FIRST_MOUSE_DOWN = false;
 
+//these methods will be on update
 var EXTERNAL_METHODS = [];
 
 var REC_ANIM;
@@ -30,14 +36,19 @@ var REC_PRESET;
 
 var DELTA_TIME = 0;
 
+//array of keys down and new keys down
 var KEYS_DOWN = [];
 var KEYS_FIRST_DOWN = [];
 
 var lastFrame = 0;
 
+//the camera position / inverse rendering offset
 var CameraPos = new Vec2(0, 0);
+
+//scale of objects in relation to their textures
 var ViewScale = new Vec2(1, 1);
 
+//images already loaded
 var CachedImages = {};
 
 var FPS;
@@ -67,7 +78,7 @@ function Init() {
 		MOUSE_POS = new Vec2(evt.clientX - mainCanvas.getBoundingClientRect().left - WIDTH / 2, evt.clientY - mainCanvas.getBoundingClientRect().top - HEIGHT / 2);
 	}, false);
 	
-	mainCanvas.addEventListener('touchstart', function(evt){
+	mainCanvas.addEventListener('touchstart', function(evt) {
 		FIRST_MOUSE_DOWN = !MOUSE_DOWN;
 		MOUSE_DOWN = true;
 		MOUSE_POS = new Vec2(evt.clientX - mainCanvas.getBoundingClientRect().left - WIDTH / 2, evt.clientY - mainCanvas.getBoundingClientRect().top - HEIGHT / 2);
@@ -106,16 +117,19 @@ function Loop() {
 	DELTA_TIME = (new Date().getTime() - lastFrame) / 1000.0;
 	lastFrame = new Date().getTime();
 
-	_frmcnt++;
-	if (_frmincmt >= 1) {
-		FPS = _frmcnt;
+	_frmcnt++; //increment frames this second
+	if (_frmincmt >= 1) { //a second has passed
+		FPS = _frmcnt; //set to accumulated frame count
+		//reset frame count
 		_frmcnt = 0;
 		_frmincmt = 0;
 	} else {
 		_frmincmt += DELTA_TIME;
 	}
 
+	//make sure canvas is the right size (also serves as the render call)
 	Resize_Canvas();
+
 	FIRST_MOUSE_DOWN = false;
 }
 
@@ -123,20 +137,24 @@ function Resize_Canvas() {
 	canvas.width = mainCanvas.width = WIDTH = window.innerWidth;
 	canvas.height = mainCanvas.height = HEIGHT = window.innerHeight;
 
+	//call gamestate update
 	CURRENT_STATE.updateFunc();
+
+	//call external functions
 	GAME_UPDATE_EXT_FUNC();
 	Render();
 
+	//remove first presses
 	for (var i = 0; i < KEYS_FIRST_DOWN.length; i++) {
 		KEYS_FIRST_DOWN.splice(i, 1);
 	}
 }
 
 function GetImage(path) {
-	if (CachedImages[path] === undefined) {
+	if (CachedImages[path] === undefined) { //if this image was already loaded
 		console.log("[DE2D] Caching New Image")
 		var img = new Image();
-		img.src = path;
+		img.src = path; //load image
 		return (CachedImages[path] = img);
 	} else {
 		return CachedImages[path];
@@ -144,27 +162,32 @@ function GetImage(path) {
 }
 
 function Render() {
-	//context.transform(1, 0, 0, -1, 0, HEIGHT); 
-	//camera
 	//context flags
 	context.imageSmoothingEnabled = true;
 	//clear
 	context.clearRect(0, 0, WIDTH, HEIGHT);
 	//render
 	context.translate(WIDTH / 2, HEIGHT / 2);
+	//apply viewscale
 	context.scale(1 / ViewScale.x, 1 / ViewScale.y);
+	//render offset
 	context.translate(-CameraPos.x, -CameraPos.y);
 
+	//render sprites first
 	for (var i = 0; i < CURRENT_STATE.sprites.length; i++) {
+		//check array element
 		if (!(Sprite.prototype.isPrototypeOf(CURRENT_STATE.sprites[i]))) {
 			console.error("Object in sprites list is not a sprite.");
 			return;
 		}
+
+		//render
 		if (CURRENT_STATE.sprites[i].enabled) {
 			RENDER_SPRITE(CURRENT_STATE.sprites[i]);
 		}
 	}
 
+	//then render UI on top
 	for (var i = 0; i < CURRENT_STATE.ui.length; i++) {
 		var uiObject = CURRENT_STATE.ui[i];
 		if (uiObject.visible) {
@@ -496,11 +519,13 @@ function Button(rect, text) {
 	this.clicked = false;
 }
 
-
+//converts chars to their codes
 function KeyCode(c) {
 	return c.charCodeAt(0) - 32;
 }
 
+
+//input functions
 var Input = Input || {
 	getKey: function(key) {
 		return KEYS_DOWN.indexOf(key) != -1;
@@ -510,6 +535,7 @@ var Input = Input || {
 	},
 };
 
+//simple truncation function
 function trunc(string, max) {
 	return (string.length > max ? string.substring(0, max) + "..." : string);
 }
