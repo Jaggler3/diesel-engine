@@ -1,10 +1,8 @@
 # Diesel Engine
+Diesel Engine (DE2D) is a game engine made from scratch in JavaScript using the HTML5 canvas;
 
-Diesel Engine (DE2D) is an HTML5 game engine.
-### Latest Version
+## Latest Version
 0.9.1
 
-License
-----
-
+## License
 MIT
